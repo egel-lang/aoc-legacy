@@ -1,0 +1,14 @@
+# Advent of Code (AoC) - day 2, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars)
+
+def parse =
+    do Regex::matches (Regex::compile "[0-9]+") |> map to_int
+
+def main =
+    read_lines stdin |> map parse 
+    |> map [{L,W,H} -> {L*W, W*H, H*L}]
+    |> map [{X,Y,Z} -> 2*(X+Y+Z) + minimum {X,Y,Z}]
+    |> sum

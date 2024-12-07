@@ -1,0 +1,12 @@
+# Advent of Code (AoC) - day 2, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars)
+
+def trace =
+    scanl [P '^' -> add P (-1,0) |P 'v' -> add P (1,0) |P '>' -> add P (0,1) |P '<' -> add P (0,-1)] (0,0)
+
+def main =
+    read_line stdin |> to_chars |> chunks 2 |> transpose |> map trace |> reduce (++)
+    |> sort |> nub |> length

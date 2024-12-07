@@ -1,0 +1,13 @@
+# Advent of Code (AoC) - day 2, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars)
+
+def parse =
+    do Regex::matches (Regex::compile "[0-9]+") |> map to_int
+
+def main =
+    read_lines stdin |> map parse 
+    |> map [DD -> (sort DD |> init |> join add |> sum) + product DD]
+    |> sum

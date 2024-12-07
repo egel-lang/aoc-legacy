@@ -1,0 +1,8 @@
+# Advent of Code (AoC) - day 1, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars)
+
+def main =
+    read_line stdin |> to_chars |> scanl [N '(' -> N + 1|N ')' -> N - 1] 0 |> index -1
