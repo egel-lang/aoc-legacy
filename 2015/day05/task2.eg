@@ -1,0 +1,18 @@
+# Advent of Code (AoC) - day 5, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars, from_chars)
+
+def zip3 =
+    [XX YY ZZ -> map [(X,(Y,Z)) -> (X,Y,Z)] (zip XX (zip YY ZZ))]
+
+def tail0 =
+    [{} -> {}|XX -> tail XX]
+
+def nice =
+    [ XX -> (fix [F {} -> false |F {P|PP} -> (elem P (tail0 PP)) || [_ -> F PP]] (zip XX (tail XX))) && 
+        [_ -> (filter [(A,_,C) -> A == C] (zip3 XX (tail XX) (tail (tail XX)))) /= {}]]
+
+def main =
+    read_lines stdin |> map to_chars |> filter nice |> length

@@ -1,0 +1,13 @@
+# Advent of Code (AoC) - day 5, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars, from_chars)
+
+def nice =
+    [ XX -> ((filter (flip elem {'a','e','i','o','u'}) XX) |> length |> (flip (>=) 3)) &&
+        [_ -> ((filter [(A,B) -> A == B] (zip XX (tail XX))) /= {}) && 
+        [_ -> ((filter [(A,B) -> elem (from_chars {A,B}) {"ab", "cd", "pq","xy"}] (zip XX (tail XX))) == {})]]]
+
+def main =
+    read_lines stdin |> map to_chars |> filter nice |> length
