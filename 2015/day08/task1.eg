@@ -1,0 +1,16 @@
+# Advent of Code (AoC) - day 8, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars, from_chars, count)
+
+def unescape =
+    do to_chars |> init |> tail |> fix
+        [F {} -> {}
+        |F {'\\','\\'|XX} -> {'\\'|F XX}
+        |F {'\\','\"'|XX} -> {'\"'|F XX}
+        |F {'\\','x',C0,C1|XX} -> {String::chr (eval ("0x" + from_chars {C0,C1}))|F XX}
+        |F {X|XX} -> {X|F XX}] |> from_chars
+        
+def main =
+    read_lines stdin |> map [X -> (count X,count (unescape X))] |> foldl add (0,0) |> uncurry (-)
