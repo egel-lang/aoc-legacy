@@ -1,0 +1,30 @@
+# Advent of Code (AoC) - day 7, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars, from_chars)
+
+def parse =
+    do Regex::matches (Regex::compile "[^ ]+") 
+    |> map [X -> if Regex::look_at (Regex::compile "[0-9]+") X then to_int X else X]
+
+def op =
+    [C {X, _, Y} -> Dict::set C Y X
+    |C {"NOT", X, _, Y} -> Dict::set C Y ((!~),X)
+    |C {X, "OR", Y, _, Z} -> Dict::set C Z (X, ($), Y)
+    |C {X, "AND", Y, _, Z} -> Dict::set C Z (X, (&), Y)
+    |C {X, "LSHIFT", Y, _, Z} -> Dict::set C Z (X, (<<), Y)
+    |C {X, "RSHIFT", Y, _, Z} -> Dict::set C Z (X, (>>), Y)]
+
+def circuit = foldl [C OP -> op C OP] Dict::dict
+
+def store =
+    [C A B -> let R = B & 65535 in Dict::set C A R; R]
+
+def eval =
+    [D N:int -> N
+    |D A:text -> print (Dict::to_list D); [(X,O,Y) -> store D A (O (eval D X) (eval D Y))
+            |(O,X) -> store D A (O (eval D X))
+            |X:int -> X |X -> store D A (eval D X)] (Dict::get D A)]
+def main =
+    read_lines stdin |> map parse |> circuit |> flip eval "a" 
