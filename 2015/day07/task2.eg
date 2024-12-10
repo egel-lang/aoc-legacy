@@ -28,4 +28,5 @@ def evaluate =
             |X:int -> X |X -> store C A (evaluate C X)] (Dict::get C A)]
 
 def main =
-    read_lines stdin |> map parse |> circuit |> flip evaluate "a" 
+    read_lines stdin |> map parse |> circuit |>
+    [D -> evaluate (Dict::copy D) "a" |> [N -> Dict::set D "b" N] |> flip evaluate "a"] 
