@@ -1,0 +1,25 @@
+# Advent of Code (AoC) - day 6, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars, from_chars)
+
+def parse =
+    do Regex::matches (Regex::compile "turn on|turn off|toggle|[0-9]+")
+    |> [{C,X0,Y0,X1,Y1} -> (C, (to_int X0, to_int Y0), (to_int X1, to_int Y1))]
+
+def board =
+    pairs (from_to 0 999) (from_to 0 999) |> map [P -> (P,0)] |> Dict::from_list
+
+def op =
+    [OP (X0,Y0) (X1,Y1) D -> printf "{} {} {}\n" OP (X0,Y0) (X1,Y1); foldl [D P -> Dict::adjust D P OP] D
+        (pairs (from_to X0 X1) (from_to Y0 Y1))]
+
+def run =
+    foldl [D ("turn on",P,Q) -> op ((+) 1) P Q D
+          |D ("turn off",P,Q) -> op [N -> if N <= 1 then 0 else N - 1] P Q D
+          |D ("toggle",P,Q) -> op ((+) 2) P Q D] board
+
+def main =
+    read_lines stdin |> map parse |> run
+    |> Dict::to_list |> map snd |> sum
