@@ -1,0 +1,21 @@
+# Advent of Code (AoC) - day 9, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars, from_chars, count)
+
+def parse =
+    do Regex::matches (Regex::compile "[0-9]+|([A-Z][a-zA-Z]*)")
+
+def graph =
+    foldl [G {A,B,N} -> Dict::set (Dict::set G (A,B) (to_int N)) (B,A) (to_int N)] Dict::dict
+
+def cities =
+    do Dict::keys |> map fst |> unique
+
+def distance =
+    [G RR -> zip RR (tail RR) |> foldl [N P -> N + Dict::get G P] 0]
+
+def main =
+    read_lines stdin |> map parse |> graph |>
+    [G -> cities G |> permutations |> map (distance G)] |> minimum
