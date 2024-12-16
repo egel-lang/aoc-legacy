@@ -1,0 +1,15 @@
+# Advent of Code (AoC) - day 10, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (to_chars, from_chars, count)
+
+def collate =
+    [{} -> {{}} |{X} -> {{X}} 
+    |{X,Y|YY} -> [{{Y|YY}|XX} -> if Y == X then {{X,Y|YY}|XX} else {{X},{Y|YY}|XX}] (collate {Y|YY}) ]
+
+def count =
+    do flatmap [XX -> ((to_chars . to_text . length) XX) ++ {head XX}]
+
+def main =
+    read_line stdin |> to_chars |> iter 40 (count . collate) |> length
