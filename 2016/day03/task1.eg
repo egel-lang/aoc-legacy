@@ -1,0 +1,11 @@
+# Advent of Code (AoC) - day 3, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def main =
+    read_lines stdin |> map (Regex::matches (Regex::compile "[0-9]+"))
+    |> map (map to_int) |> map [{X,Y,Z} -> {(X,Y,Z),(X,Z,Y),(Y,Z,X)}]
+    |> filter (all [(X, Y, Z) -> (X + Y) > Z])
+    |> length
