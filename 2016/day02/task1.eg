@@ -1,0 +1,16 @@
+# Advent of Code (AoC) - day 2, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def dir = ['D' -> (0,1) |'U' -> (0,-1) |'R' -> (1,0) |'L' -> (-1,0)]
+
+def add0 = [P Q -> add P Q |> let F = [-1 -> 0|3 ->2|X->X] in [(X,Y) -> (F X, F Y)]]
+
+def walk = do foldl [{P|PP} QQ -> {foldl add0 P QQ, P|PP}] {(1,1)} |> init |> reverse
+
+def num = [(X,Y) -> Y*3 + X + 1]
+
+def main =
+    read_lines stdin |> map (do to_chars |> map dir) |> walk |> map num
