@@ -1,0 +1,16 @@
+# Advent of Code (AoC) - day 4, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def parse =
+    do Regex::group (Regex::compile "((?:[a-z]+-)*)([0-9]+)(.+)")
+    |> \{X,Y,Z} -> (filter ((/=) '-') (to_chars X), to_int Y, to_chars Z |> init |> tail)
+
+def tally =
+    do Dict::count |> Dict::inverse |> Dict::to_list |> map snd |> flatten |> take 5
+
+def main =
+    read_lines stdin |> map parse |> map (proj_update 0 tally) |> filter [(X,Y,Z) -> X == Z]
+    |> map (proj 1) |> sum

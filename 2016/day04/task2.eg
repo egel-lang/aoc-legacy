@@ -1,0 +1,14 @@
+# Advent of Code (AoC) - day 4, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def parse =
+    do Regex::group (Regex::compile "((?:[a-z]+-)*)([0-9]+)(.+)") |> \{X,Y,Z} -> (X, to_int Y)
+
+def rot =
+    do to_chars |> map [' ' -> ' '|'-' -> ' '|'z' -> 'a'| C -> String::chr (String::ord C + 1)] |> from_chars
+
+def main =
+    read_lines stdin |> map parse |> map [(X,Y) -> (iter Y rot X, Y)] |> map [(X,Y) -> printf "{} - {}\n" X Y]
