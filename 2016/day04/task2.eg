@@ -11,4 +11,5 @@ def rot =
     do to_chars |> map [' ' -> ' '|'-' -> ' '|'z' -> 'a'| C -> String::chr (String::ord C + 1)] |> from_chars
 
 def main =
-    read_lines stdin |> map parse |> map [(X,Y) -> (iter Y rot X, Y)] |> map [(X,Y) -> printf "{} - {}\n" X Y]
+    read_lines stdin |> map parse |> map [(X,Y) -> (iter (Y%26) rot X, Y)] |> map [(X,Y) -> printf "{} - {}\n" X Y]
+    |> [_ -> none]
