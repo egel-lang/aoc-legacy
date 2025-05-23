@@ -4,11 +4,7 @@ import "prelude.eg"
 
 using System, OS, List, String (from_chars, to_chars)
 
-def tally =
-    do Dict::count |> Dict::inverse |> Dict::to_list |> map snd |> flatten |> take 5
-
 def main =
     read_lines stdin |> map to_chars |> transpose |> 
     map (do Dict::count |> Dict::to_list |> map swap |> sort |> last |> snd)
     |> from_chars
-    
