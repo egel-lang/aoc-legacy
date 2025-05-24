@@ -1,0 +1,18 @@
+# Advent of Code (AoC) - day 7, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def parse =
+    do String::split_pattern "[\\[\\]]" |> map to_chars
+
+def abba =
+    [{A,B,C,D} -> (A == D) && [_ -> (B == C) && [_ -> A /= B]]]
+
+def valid =
+    [{} -> true |{X} -> any abba X
+    |{X,Y|XX} -> (not (any abba Y)) && [_ -> (any abba X) || [_ -> valid XX]]]
+
+def main =
+    read_lines stdin |> map parse |> map (map (windows 4)) |> filter valid |> length
