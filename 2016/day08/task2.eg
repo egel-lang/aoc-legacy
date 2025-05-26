@@ -1,0 +1,30 @@
+# Advent of Code (AoC) - day 8, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def parse =
+    do Regex::matches (Regex::compile "(?:row|column|rect|[0-9]+)") |> [{X,Y,Z} -> (X, to_int Y, to_int Z)]
+
+def rect =
+    [X Y D -> foldl [D P -> Dict::set D P '*'] D (pairs (from_to 0 (X - 1)) (from_to 0 (Y - 1)))]
+
+def row =
+    [Y DX D -> foldl [D (P,N) -> Dict::set D P N] D (map [X -> ((X,Y), Dict::get D ((((X - DX)%50)+50)%50,Y))] (from_to 0 49))]
+
+def column =
+    [X DY D -> foldl [D (P,N) -> Dict::set D P N] D (map [Y -> ((X,Y), Dict::get D (X, (((Y - DY)%6)+6)%6))] (from_to 0 5))]
+    
+def board = Dict::from_list (map [P -> (P,' ')] (pairs (from_to 0 49) (from_to 0 5)))
+
+def pp = [D -> [(X,Y) -> map [Y -> map [X -> print (Dict::get D (X,Y))] (from_to 0 X); print "\n"] (from_to 0 Y); none] (49,5)]
+
+def display =
+    foldl
+    [D ("rect",X,Y) -> rect X Y D
+    |D ("column",X,DX) -> column X DX D
+    |D ("row",Y,DY) -> row Y DY D]
+
+def main =
+    read_lines stdin |> map parse |> display board |> pp
