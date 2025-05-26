@@ -1,0 +1,17 @@
+# Advent of Code (AoC) - day 9, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def expand1 =
+    [N M {')'|XX} -> M * (expand (take N XX)) + expand (drop N XX) |N M {D|XX} -> expand1 N (M*10+to_int D) XX]
+
+def expand0 =
+    [N {'x'|XX} -> expand1 N 0 XX |N {D|XX} -> expand0 (N*10+to_int D) XX]
+
+def expand =
+    [{} -> 0 |{'('|XX} -> expand0 0 XX |{X|XX} -> 1 + expand XX]
+
+def main =
+    read_lines stdin |> map to_chars |> map expand |> sum
