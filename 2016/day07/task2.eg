@@ -1,0 +1,21 @@
+# Advent of Code (AoC) - day 7, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def parse = do String::split_pattern "[\\[\\]]" |> map to_chars
+
+def aba = [{A,B,C} -> (A == C) && [_ -> A /= B]]
+
+def aba2bab = [{A,B,_} -> {B,A,B}]
+
+def gather =
+    [{} -> ({},{})
+    |{X} -> (X,{})
+    |{X,Y|XX} -> let (XX,YY) = gather XX in (X ++ XX, Y ++ YY)]
+
+def main =
+    read_lines stdin |> map parse |> map (map (do windows 3 |> filter aba))
+    |> map gather |> filter [(XX,YY) -> any [X -> elem (aba2bab X) YY] XX]
+    |> length
