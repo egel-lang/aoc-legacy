@@ -1,0 +1,10 @@
+# Advent of Code (AoC) - day 1, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def main =
+    read_line stdin |> to_chars |> map to_int |> [XX -> XX ++ {last XX}]
+    |> [XX -> zip XX (tail XX)] |> filter [(X,Y) -> X == Y]
+    |> map fst |> sum
