@@ -1,0 +1,15 @@
+# Advent of Code (AoC) - day 2, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def pair0 = [XX -> flatmap [{} -> {} |{X|XX} -> map [Y -> (X,Y)] {X|XX}] (tails XX)]
+
+def divides = [X Y -> and (X/=Y) ((X/Y)*Y == X)]
+
+def main =
+    read_lines stdin |> map (do Regex::matches (Regex::compile "[0-9]+") |> map to_int)
+    |> map pair0 |> map (filter [(X,Y) -> if X < Y then divides Y X else divides X Y])
+    |> map [{(X,Y)} -> if X < Y then Y/X else X/Y] |> sum
+

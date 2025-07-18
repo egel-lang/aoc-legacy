@@ -1,0 +1,9 @@
+# Advent of Code (AoC) - day 2, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def main =
+    read_lines stdin |> map (do Regex::matches (Regex::compile "[0-9]+") |> map to_int)
+    |> map [XX -> maximum XX - minimum XX] |> sum
