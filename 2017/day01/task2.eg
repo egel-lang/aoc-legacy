@@ -1,0 +1,11 @@
+# Advent of Code (AoC) - day 1, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def main =
+    read_line stdin |> to_chars |> map to_int
+    |> [XX -> let (YY,ZZ) = split_at (length XX/2) XX in zip XX (ZZ ++ YY)] 
+    |> filter [(X,Y) -> X == Y]
+    |> map fst |> sum
