@@ -1,0 +1,20 @@
+# Advent of Code (AoC) - day 2, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def pairs =
+    [{} -> {}
+    |{X|XX} -> map [Y -> (X,Y)] XX ++ pairs XX]
+
+def same =
+    [_ {} -> {}
+    |{} _ -> {}
+    |{X|XX} {Y|YY} -> if X == Y then {X|same XX YY} else same XX YY]
+
+def main =
+    read_lines stdin |> map to_chars
+    |> \WW -> let L = length (head WW) in
+    pairs WW |> map (uncurry same) |> filter [W -> length W == (L - 1)] |> head
+    |> from_chars

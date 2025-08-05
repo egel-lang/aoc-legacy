@@ -1,0 +1,9 @@
+# Advent of Code (AoC) - day 2, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def main =
+    read_lines stdin |> map (do to_chars |> Dict::count |> Dict::inverse)
+    |> [DD -> length (filter [D -> Dict::has D 2] DD) * length (filter [D -> Dict::has D 3] DD)]
