@@ -1,0 +1,16 @@
+# Advent of Code (AoC) - day 1, task 2
+
+import "prelude.eg"
+import "generator.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def find =
+    [N VV LL ->
+        let M = N + (Gen::head LL) in
+        printf "freq: {}\n" M;
+        if Dict::has VV M then M else find M (Dict::set VV M true) (Gen::tail LL) ]
+
+def main =
+    read_lines stdin |> map to_int |> Gen::from_list |> Gen::cycle
+    |> find 0 (Dict::set Dict::dict 0 true)
