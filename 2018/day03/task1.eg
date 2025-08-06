@@ -1,0 +1,12 @@
+# Advent of Code (AoC) - day 3, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def to_coords =
+    [{_, X, Y, M, N} -> map (add (X,Y)) (pairs (from_to 0 (M - 1)) (from_to 0 (N - 1)))]
+
+def main =
+    read_lines stdin |> map (do Regex::matches (Regex::compile "[0-9]+") |> map to_int)
+    |> flatmap to_coords |> Dict::count |> Dict::to_list |> filter [(_,N) -> N > 1] |> length
