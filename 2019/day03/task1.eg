@@ -1,0 +1,26 @@
+# Advent of Code (AoC) - day 3, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def parse =
+    do map [L -> Regex::matches (Regex::compile "U|D|R|L|[0-9]+") L |>
+                 chunks 2  |> map [{X,Y} -> (X, to_int Y)]]
+
+def coords =
+    [P {} -> {} 
+    |P {(_,0)|XX} -> coords P XX
+    |P {("U",N)|XX} -> let P = add (-1,0) P in {P|coords P {("U",N - 1)|XX}}
+    |P {("D",N)|XX} -> let P = add ( 1,0) P in {P|coords P {("D",N - 1)|XX}}
+    |P {("L",N)|XX} -> let P = add (0,-1) P in {P|coords P {("L",N - 1)|XX}}
+    |P {("R",N)|XX} -> let P = add (0, 1) P in {P|coords P {("R",N - 1)|XX}}]
+
+def count =
+    foldl [D N -> Dict::set D N (if Dict::has D N then 1 + Dict::get D N else 1)]
+
+def main =
+    read_lines stdin |> parse |> map (coords (0,0)) 
+    |> [{W0,W1} -> count (count Dict::dict (unique W0)) (unique W1)] |> Dict::to_list 
+    |> filter [(_,N) -> N > 1] |> map fst
+    |> map [(X,Y) -> abs0 X + abs0 Y] |> minimum
