@@ -1,0 +1,27 @@
+# Advent of Code (AoC) - day 2, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def fetch =
+    [D IP -> let F = Dict::get_with_default 0 D in (F IP, F (IP + 1), F (IP + 2), F (IP + 3))]
+
+def decode =
+    [D (1,X,Y,Z) -> Dict::set D Z (Dict::get D X + Dict::get D Y)
+    |D (2,X,Y,Z) -> Dict::set D Z (Dict::get D X * Dict::get D Y)
+    |D _ -> throw "heh"]
+
+def run =
+    [D IP -> if Dict::get D IP == 99 then D else run (decode D (fetch D IP)) (IP+4)]
+
+def search =
+    [D {(N,V)|XX} -> 
+        let D0 = Dict::set (Dict::set (Dict::copy D) 1 N) 2 V in
+        let D0 = run D0 0 in
+        if Dict::get D0 0 == 19690720 then 100*N + V else search D XX]
+
+def main =
+    read_line stdin |> Regex::matches (Regex::compile "[0-9]+") |> map to_int
+    |> [L -> zip (from_to 0 (length L)) L ] |> Dict::from_list
+    |> [D -> search D (pairs (from_to 0 99) (from_to 0 99))]
