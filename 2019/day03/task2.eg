@@ -1,0 +1,28 @@
+# Advent of Code (AoC) - day 3, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def parse =
+    do map [L -> Regex::matches (Regex::compile "U|D|R|L|[0-9]+") L |>
+                 chunks 2  |> map [{X,Y} -> (X, to_int Y)]]
+
+def coords =
+    [P S {} -> {}
+    |P S {(_,0)|XX} -> coords P S XX
+    |P S {("U",N)|XX} -> let P = add (-1,0) P in {(P,S+1)|coords P (S+1) {("U",N - 1)|XX}}
+    |P S {("D",N)|XX} -> let P = add ( 1,0) P in {(P,S+1)|coords P (S+1) {("D",N - 1)|XX}}
+    |P S {("L",N)|XX} -> let P = add (0,-1) P in {(P,S+1)|coords P (S+1) {("L",N - 1)|XX}}
+    |P S {("R",N)|XX} -> let P = add (0, 1) P in {(P,S+1)|coords P (S+1) {("R",N - 1)|XX}}]
+
+def to_dict = [XX -> foldl [D (P,S) -> if Dict::has D P then D else Dict::set D P S] Dict::dict XX]
+
+def count = foldl [D N -> Dict::set D N (if Dict::has D N then 1 + Dict::get D N else 1)]
+
+def main =
+    read_lines stdin |> parse |> map (coords (0,0) 0) |> map to_dict
+    |> [{D0,D1} -> count (count Dict::dict (Dict::keys D0)) (Dict::keys D1) |> Dict::to_list 
+                   |> filter [(_,N) -> N > 1] |> map fst 
+                   |> map [P -> Dict::get D0 P + Dict::get D1 P]]
+    |> minimum
