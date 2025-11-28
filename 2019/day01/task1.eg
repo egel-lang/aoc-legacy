@@ -1,0 +1,8 @@
+# Advent of Code (AoC) - day 1, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def main =
+    read_lines stdin |> map to_int |> map [N -> (N/3) - 2] |> sum

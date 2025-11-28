@@ -1,0 +1,11 @@
+# Advent of Code (AoC) - day 1, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def fuel =
+    [ N -> let M = (N/3) - 2 in if M <= 0 then 0 else M + fuel M ]
+
+def main =
+    read_lines stdin |> map to_int |> map fuel |> sum
