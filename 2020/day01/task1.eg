@@ -1,0 +1,11 @@
+# Advent of Code (AoC) - day 1, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def pairs = [{} -> {}| {X|XX} -> map (tuple X) XX ++ pairs XX]
+
+def main =
+    read_lines stdin |> map to_int |> pairs
+    |> filter [(X,Y) -> (X + Y) == 2020] |> head |> uncurry (*)

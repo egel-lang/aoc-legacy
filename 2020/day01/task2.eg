@@ -1,0 +1,13 @@
+# Advent of Code (AoC) - day 1, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars)
+
+def triples = [{} -> {} | {X|XX} -> pairs X XX ++ triples XX ]
+
+def pairs = [X {} -> {} | X {Y|YY} -> map [Z -> (X,Y,Z)] YY ++ pairs X YY ]
+
+def main =
+    read_lines stdin |> map to_int |> triples 
+    |> filter [(X,Y,Z) -> (X + Y + Z) == 2020] |> head |> [(X,Y,Z) -> X * Y * Z]
