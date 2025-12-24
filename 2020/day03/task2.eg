@@ -1,0 +1,17 @@
+# Advent of Code (AoC) - day 3, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), D = Dict
+
+def count = [D W H -> do map [(X,Y) -> D::get D (X%H,Y%W)] |> filter ((==) '#') |> length ]
+
+def main =
+    read_lines stdin |> map to_chars |> D::from_lists |> \D ->
+    let (H,W) = add (1,1) (foldl [(I,J) (M,N) -> (max0 I M, max0 J N)] (0,0) (D::keys D)) in
+    {count D W H (map [N -> (N,N)]   (from_to 0 (H - 1))),
+     count D W H (map [N -> (N,3*N)] (from_to 0 (H - 1))),
+     count D W H (map [N -> (N,5*N)] (from_to 0 (H - 1))),
+     count D W H (map [N -> (N,7*N)] (from_to 0 (H - 1))),
+     count D W H (map [N -> (2*N,N)] (from_to 0 (H / 2)))} |> product
+
