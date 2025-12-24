@@ -1,0 +1,13 @@
+# Advent of Code (AoC) - day 2, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex
+
+def parse = do map (R::matches (R::compile "[0-9]+|[a-z]+"))
+    |> map [{I,J,C,CC} -> (to_int I, to_int J, to_chars C |> head, to_chars CC)]
+
+def valid = [(I,J,C,CC) -> filter ((==) C) CC |> length |> [N -> and (N >= I) (N <= J)]]
+
+def main =
+    read_lines stdin |> parse |> filter valid |> length
