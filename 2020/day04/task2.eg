@@ -1,0 +1,42 @@
+# Advent of Code (AoC) - day 4, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex, D = Dict
+
+def parse =
+    do split_on ""|> map (reduce [X Y -> X + " " + Y])
+    |> map (R::matches (R::compile "#?[a-z0-9]+")) |> map(chunks 2)
+    |> map (map list_to_tuple)
+
+def required =
+    do D::keys |> [FF -> printf "{}\n" FF;
+        and (elem "byr" FF) (
+        and (elem "iyr" FF) (
+        and (elem "eyr" FF) (
+        and (elem "hgt" FF) (
+        and (elem "hcl" FF) (
+        and (elem "ecl" FF) (
+            (elem "pid" FF))))))) ]
+
+def valid_byr = [S -> printf "byr:{}\n" S;R::match (R::compile "[0-9]{4}") S && [_ -> to_int S >= 1920 && [_ -> to_int S <= 2002]]]
+def valid_iyr = [S -> printf "iyr:{}\n" S;R::match (R::compile "[0-9]{4}") S && [_ -> to_int S >= 2010 && [_ -> to_int S <= 2020]]]
+def valid_eyr = [S -> printf "eyr:{}\n" S;R::match (R::compile "[0-9]{4}") S && [_ -> to_int S >= 2020 && [_ -> to_int S <= 2030]]]
+def valid_hgt_cm = [S -> printf "hgt cm:{}\n" S;R::match (R::compile "[0-9]+cm") S && [_ -> to_int S >= 150 && [_ -> to_int S <= 193]]]
+def valid_hgt_in = [S -> printf "hgh in:{}\n" S;R::match (R::compile "[0-9]+in") S && [_ -> to_int S >= 59 && [_ -> to_int S <= 76]]]
+def valid_hcl = [S -> printf "hcl:{}\n" S;R::match (R::compile "#[0-9a-z]{6}") S]
+def valid_ecl = [S -> printf "ecl:{}\n" S;R::match (R::compile "amb|blu|brn|gry|grn|hzl|oth") S]
+def valid_pid = [S -> printf "pid:{}\n" S;R::match (R::compile "[0-9]{9}") S]
+
+def valid = [D ->
+    valid_byr (D::get D "byr") &&
+    [_ -> valid_iyr (D::get D "iyr") &&
+    [_ -> valid_eyr (D::get D "eyr") &&
+    [_ -> ((valid_hgt_cm (D::get D "hgt")) || [_ -> valid_hgt_in (D::get D "hgt")]) &&
+    [_ -> valid_hcl (D::get D "hcl") &&
+    [_ -> valid_ecl (D::get D "ecl") &&
+    [_ -> valid_pid (D::get D "pid")]]]]]]]
+
+def main =
+    read_lines stdin |> parse |> map D::from_list |> filter required |> filter valid |> length
+

@@ -1,0 +1,24 @@
+# Advent of Code (AoC) - day 4, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex, D = Dict
+
+def parse =
+    do split_on ""|> map (reduce [X Y -> X + " " + Y])
+    |> map (R::matches (R::compile "#?[a-z0-9]+")) |> map(chunks 2)
+    |> map (map list_to_tuple)
+
+def valid =
+    do D::keys |> [FF -> printf "{}\n" FF;
+        and (elem "byr" FF) (
+        and (elem "iyr" FF) (
+        and (elem "eyr" FF) (
+        and (elem "hgt" FF) (
+        and (elem "hcl" FF) (
+        and (elem "ecl" FF) (
+            (elem "pid" FF))))))) ]
+
+def main =
+    read_lines stdin |> parse |> map D::from_list |> filter valid |> length
+
