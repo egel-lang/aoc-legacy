@@ -1,0 +1,11 @@
+# Advent of Code (AoC) - day 5, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex, D = Dict
+
+def main =
+    read_lines stdin |> map to_chars |> 
+    map (foldl [N C -> N * 2 + (['B' -> 1 |'R' -> 1 |_ -> 0] C)] 0)
+    |> maximum
+
