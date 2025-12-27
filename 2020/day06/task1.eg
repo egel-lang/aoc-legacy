@@ -1,0 +1,10 @@
+# Advent of Code (AoC) - day 6, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex, D = Dict
+
+def main =
+    read_lines stdin |> map to_chars |> split_on {} |> 
+    map (do flatten |> unique |> length) |> sum
+
