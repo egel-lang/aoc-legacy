@@ -1,0 +1,16 @@
+# Advent of Code (AoC) - day 7, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex, D = Dict
+
+def reach =
+    [D E -> fix [F M X ->
+        let S = D::get D X |> map snd in
+        elem E S || [_ -> any id (map (D::memo M F) S)]]]
+
+def main =
+    read_lines stdin |> map (R::matches (R::compile "[a-z]+ [a-z]+ bag|[0-9]+"))
+    |> foldl [D {X|XX} -> D::set D X (fix [F {} -> {}|F {X} -> {}|F {N,B|XX} -> {(to_int N, B)|F XX}] XX)] D::dict
+    |> [D -> map (reach D "shiny gold bag" D::dict) (D::keys D)] |> filter id |> length
+

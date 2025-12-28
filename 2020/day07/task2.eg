@@ -1,0 +1,17 @@
+# Advent of Code (AoC) - day 7, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex, D = Dict
+
+def contains =
+    [D -> fix [F M X ->
+        let S0 = D::get D X in
+        let S1 = map (D::memo M F) (map snd S0) in
+            sum (map fst S0) + (zip (map fst S0) S1 |> map (uncurry (*)) |> sum)]]
+
+def main =
+    read_lines stdin |> map (R::matches (R::compile "[a-z]+ [a-z]+ bag|[0-9]+"))
+    |> foldl [D {X|XX} -> D::set D X (fix [F {} -> {}|F {X} -> {}|F {N,B|XX} -> {(to_int N, B)|F XX}] XX)] D::dict
+    |> [D -> contains D D::dict "shiny gold bag"]
+
