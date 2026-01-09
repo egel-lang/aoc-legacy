@@ -1,0 +1,18 @@
+# Advent of Code (AoC) - day 8, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex, D = Dict
+
+def go =
+    [D VV PC ACC ->
+        if D::has VV PC then ACC else
+        let VV = D::set VV PC true in
+        [("nop",_) -> go D VV (PC+1) ACC
+        |("acc",N) -> go D VV (PC+1) (ACC+N)
+        |("jmp",N) -> go D VV (PC+N) ACC] (D::get D PC)]
+
+def main =
+    read_lines stdin |> map (R::matches (R::compile "nop|acc|jmp|-?[0-9]+"))
+    |> [XX -> zip (from_to 0 (length XX - 1)) (map [{X,Y} -> (X, to_int Y)] XX)]
+    |> [XX -> go (D::from_list XX) D::dict 0 0]
