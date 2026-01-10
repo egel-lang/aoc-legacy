@@ -1,0 +1,14 @@
+# Advent of Code (AoC) - day 9, task 1
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex, D = Dict
+
+def l = 25
+
+def parse = do map to_int |> tails |> filter [XX -> length XX > l] |> map (take (l+1)) |> map [XX -> (last XX, init XX)]
+
+def pairs = [{} -> {} |{X|XX} -> map (tuple X) XX ++ pairs XX]
+
+def main =
+    read_lines stdin |> parse |> filter [(X,XX) -> not_elem X (map (uncurry (+)) (pairs XX))] |> head |> fst
