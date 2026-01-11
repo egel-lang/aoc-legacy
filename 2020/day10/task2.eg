@@ -1,0 +1,18 @@
+# Advent of Code (AoC) - day 10, task 2
+
+import "prelude.eg"
+
+using System, OS, List, String (from_chars, to_chars), R = Regex, D = Dict
+
+def count =
+    [D E -> fix [F M X ->
+        if X == E then 1
+        else if D::has D X then D::memo M F (X+1) + D::memo M F (X+2) + D::memo M F (X+3)
+        else 0]]
+
+def main =
+    read_lines stdin |> map to_int |> sort |> [XX -> 
+        let XX = {0|XX} in
+        let E = last XX + 3 in
+        let D = foldl [D X -> D::set D X true] D::dict XX in
+        count D E D::dict 0 ]
